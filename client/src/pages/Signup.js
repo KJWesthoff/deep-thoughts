@@ -1,41 +1,36 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/react-hooks";
-import { ADD_USER } from "../utils/mutations";
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_USER } from '../utils/mutations';
+
 import Auth from '../utils/auth';
 
 const Signup = () => {
-  const [formState, setFormState] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [formState, setFormState] = useState({ username: '', email: '', password: '' });
+  const [addUser, { error }] = useMutation(ADD_USER);
 
   // update state based on form input changes
-  const handleChange = (event) => {
+  const handleChange = event => {
     const { name, value } = event.target;
 
     setFormState({
       ...formState,
-      [name]: value,
+      [name]: value
     });
   };
 
-  const [addUser, { error }] = useMutation(ADD_USER);
-
   // submit form
-  const handleFormSubmit = async (event) => {
+  const handleFormSubmit = async event => {
     event.preventDefault();
-    // use try/catch instead of promises to handle errors
-    try {
-      // execute addUser mutation and pass in variable data from form
-      const { data } = await addUser({
-        variables: { ...formState },
-      });
 
+    try {
+      const { data } = await addUser({
+        variables: { ...formState }
+      });
+      
       Auth.login(data.addUser.token);
-      console.log(data);
     } catch (e) {
       console.error(e);
+      
     }
   };
 
@@ -77,7 +72,8 @@ const Signup = () => {
                 Submit
               </button>
             </form>
-            {error && <div>Sign up failed</div>}
+
+            {error && <div>Signup failed</div>}
           </div>
         </div>
       </div>
