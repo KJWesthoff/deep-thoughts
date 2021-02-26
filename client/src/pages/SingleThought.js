@@ -1,14 +1,16 @@
-import React from "react";
+import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useQuery } from "@apollo/react-hooks";
-import { QUERY_THOUGHT } from "../utils/queries";
+
 import ReactionList from '../components/ReactionList';
 
-const SingleThought = (props) => {
+import { useQuery } from '@apollo/react-hooks';
+import { QUERY_THOUGHT } from '../utils/queries';
+
+const SingleThought = props => {
   const { id: thoughtId } = useParams();
 
   const { loading, data } = useQuery(QUERY_THOUGHT, {
-    variables: { id: thoughtId },
+    variables: { id: thoughtId }
   });
 
   const thought = data?.thought || {};
@@ -23,14 +25,14 @@ const SingleThought = (props) => {
         <p className="card-header">
           <span style={{ fontWeight: 700 }} className="text-light">
             {thought.username}
-          </span>{" "}
+          </span>{' '}
           thought on {thought.createdAt}
         </p>
         <div className="card-body">
           <p>{thought.thoughtText}</p>
         </div>
       </div>
-      {Auth.loggedIn() && <ReactionForm thoughtId={thought._id} />}
+
       {thought.reactionCount > 0 && <ReactionList reactions={thought.reactions} />}
     </div>
   );
